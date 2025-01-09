@@ -1,5 +1,5 @@
 <?php
-require_once '../database.php';
+require_once '../core/database.php';
 
 use Core\Database;
 
@@ -11,3 +11,5 @@ try {
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }
+
+

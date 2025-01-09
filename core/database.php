@@ -1,23 +1,19 @@
+<?php
+
 namespace Core;
 
 use PDO;
 use PDOException;
 
 class Database {
-    private $host;
-    private $db;
-    private $user;
-    private $pass;
-    private $charset;
+    private $host = 'localhost'; 
+    private $db = 'nba_store';   
+    private $user = 'root';      
+    private $pass = '';          
+    private $charset = 'utf8mb4'; 
     private $pdo;
 
     public function __construct() {
-        $this->host = getenv('DB_HOST');
-        $this->db = getenv('DB_NAME');
-        $this->user = getenv('DB_USER');
-        $this->pass = getenv('DB_PASS');
-        $this->charset = 'utf8mb4';
-
         $dsn = "mysql:host={$this->host};dbname={$this->db};charset={$this->charset}";
 
         try {
