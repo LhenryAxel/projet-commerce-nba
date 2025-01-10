@@ -12,8 +12,8 @@ $requestUri = trim($_SERVER['REQUEST_URI'], '/');
 
 // Route handling
 if ($requestUri === 'projet-commerce-nba/public') {
-    echo "<h1>Welcome to the NBA Store application</h1>";
-    echo '<a href="/projet-commerce-nba/public/categories">Manage categories</a>';
+    echo "<h1>Bienvenue dans l'application NBA Store</h1>";
+    echo '<a href="/projet-commerce-nba/public/categories">Gérer les catégories</a>';
 } 
 elseif ($requestUri === 'projet-commerce-nba/public/categories') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
