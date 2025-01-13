@@ -16,11 +16,19 @@ class ProductController {
     }
 
     // Handle product list request and load the view
-    public function handleRequest() {
-        $categories = (new \Models\Category())->getAll(); 
-        $products = $this->model->getAll(); 
+    public function handleRequest($category_filter = null, $price_min = null, $price_max = null) {
+        $categories = $this->categoryModel->getAll();
+    
+        $filters = [
+            'category_id' => $category_filter,
+            'price_min' => $price_min,
+            'price_max' => $price_max,
+        ];
+        $products = $this->model->getAllWithFilters($filters);
+    
         require_once '../src/Views/products.php';
     }
+    
     
     // Create a new product and redirect to the list
     public function create($name, $description, $price, $stock, $category_id) {

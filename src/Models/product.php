@@ -68,4 +68,39 @@ class Product {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function getAllWithFilters($filters) {
+        $query = "
+            SELECT products.*, categories.name AS category_name 
+            FROM products 
+            LEFT JOIN categories ON products.category_id = categories.id 
+            WHERE 1 = 1
+        ";
+    
+        // Add condition dynamically
+        if (!empty($filters['category_id'])) {
+            $query .= " AND products.category_id = :category_id";
+        }
+        if (!empty($filters['price_min'])) {
+            $query .= " AND products.price >= :price_min";
+        }
+        if (!empty($filters['price_max'])) {
+            $query .= " AND products.price <= :price_max";
+        }
+    
+        $stmt = $this->pdo->prepare($query);
+    
+        if (!empty($filters['category_id'])) {
+            $stmt->bindParam(':category_id', $filters['category_id'], PDO::PARAM_INT);
+        }
+        if (!empty($filters['price_min'])) {
+            $stmt->bindParam(':price_min', $filters['price_min']);
+        }
+        if (!empty($filters['price_max'])) {
+            $stmt->bindParam(':price_max', $filters['price_max']);
+        }
+    
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }    
 }

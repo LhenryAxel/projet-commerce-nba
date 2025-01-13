@@ -136,6 +136,7 @@
 <body>
     <h1>Gestion des produits</h1>
 
+    <!-- Formulaire pour ajouter un produit -->
     <form action="/projet-commerce-nba/public/products" method="POST">
         <label for="name">Nom :</label>
         <input type="text" name="name" id="name" placeholder="Nom du produit" required>
@@ -159,6 +160,28 @@
         <button type="submit">Ajouter le produit</button>
     </form>
 
+        <!-- Filtre pour les produits -->
+        <form method="GET" action="/projet-commerce-nba/public/products">
+        <label for="category_filter">Filtrer par catégorie :</label>
+        <select name="category_filter" id="category_filter">
+            <option value="">Toutes les catégories</option>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?= $category['id'] ?>" <?= isset($_GET['category_filter']) && $_GET['category_filter'] == $category['id'] ? 'selected' : '' ?>>
+                    <?= $category['name'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <label for="price_min">Prix minimum :</label>
+        <input type="number" name="price_min" id="price_min" value="<?= $_GET['price_min'] ?? '' ?>" step="0.01">
+
+        <label for="price_max">Prix maximum :</label>
+        <input type="number" name="price_max" id="price_max" value="<?= $_GET['price_max'] ?? '' ?>" step="0.01">
+
+        <button type="submit">Filtrer</button>
+    </form>
+
+    <!-- Tableau des produits -->
     <table>
         <thead>
             <tr>
