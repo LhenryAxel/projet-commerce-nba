@@ -49,4 +49,15 @@ class Category {
         $stmt->bindParam(':description', $description);
         return $stmt->execute();
     }
+
+    // Show product count by categories
+    public function getProductCountByCategory() {
+        $stmt = $this->pdo->query("
+            SELECT categories.id, categories.name, categories.description, COUNT(products.id) AS product_count
+            FROM categories
+            LEFT JOIN products ON categories.id = products.category_id
+            GROUP BY categories.id, categories.name, categories.description
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }      
 }

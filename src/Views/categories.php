@@ -150,6 +150,7 @@
                 <th>ID</th>
                 <th>Nom</th>
                 <th>Description</th>
+                <th>Nombre de produits</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -160,10 +161,11 @@
                         <td><?= $category['id'] ?></td>
                         <td><?= $category['name'] ?></td>
                         <td><?= $category['description'] ?></td>
+                        <td><?= $category['product_count'] ?></td> <!-- Affichage du nombre de produits -->
                         <td>
                             <a href="/projet-commerce-nba/public/categories/delete?id=<?= $category['id'] ?>"
-                               class="delete"
-                               onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')">Supprimer</a>
+                            class="delete"
+                            onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')">Supprimer</a>
 
                             <a href="/projet-commerce-nba/public/categories/edit?id=<?= $category['id'] ?>">Modifier</a>
                         </td>
@@ -171,7 +173,7 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4">Aucune catégorie trouvée.</td>
+                    <td colspan="5">Aucune catégorie trouvée.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

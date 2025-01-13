@@ -14,6 +14,7 @@ class CategoryController {
     // Handle the category list display
     public function handleRequest() {
         $categories = $this->model->getAll();
+        $categories = $this->model->getProductCountByCategory();
 
         require_once '../src/Views/categories.php';
     }
