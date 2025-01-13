@@ -8,11 +8,13 @@ use PDO;
 class Product {
     private $pdo;
 
+
     public function __construct() {
         $db = new Database();
         $this->pdo = $db->getConnection();
     }
 
+    // Fetch all products with category names
     public function getAll() {
         $stmt = $this->pdo->query("
             SELECT products.*, categories.name AS category_name 
@@ -22,6 +24,7 @@ class Product {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Create a new product
     public function create($name, $description, $price, $stock, $category_id) {
         $stmt = $this->pdo->prepare("
             INSERT INTO products (name, description, price, stock, category_id) 
@@ -35,6 +38,7 @@ class Product {
         return $stmt->execute();
     }
 
+    // Fetch a product by its ID
     public function getById($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -42,6 +46,7 @@ class Product {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Update an existing product
     public function update($id, $name, $description, $price, $stock, $category_id) {
         $stmt = $this->pdo->prepare("
             UPDATE products 
@@ -57,6 +62,7 @@ class Product {
         return $stmt->execute();
     }
 
+    // Delete a product by its ID
     public function delete($id) {
         $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
