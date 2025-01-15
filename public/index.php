@@ -237,6 +237,53 @@ switch (true) {
         exit;
         break;
 
+    case $requestUri === 'projet-commerce-nba/public/users':
+    $users = $userController->listUsers();
+    require_once '../src/Views/users.php';
+    break;
+
+case $requestUri === 'projet-commerce-nba/public/users/create':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];
+
+        $userController->createUser($first_name, $last_name, $email, $password, $role);
+        header('Location: /projet-commerce-nba/public/users');
+        exit;
+    }
+    break;
+
+    case strpos($requestUri, 'projet-commerce-nba/public/users/edit') !== false:
+        $id = $_GET['id'];
+        $user = $userController->getUserById($id);
+        require_once '../src/Views/edit_user.php'; // Vue pour modifier un utilisateur
+        break;
+
+    case strpos($requestUri, 'projet-commerce-nba/public/users/update') !== false:
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $first_name = $_POST['first_name'];
+            $last_name = $_POST['last_name'];
+            $email = $_POST['email'];
+            $role = $_POST['role'];
+
+            $userController->updateUser($id, $first_name, $last_name, $email, $role);
+            header('Location: /projet-commerce-nba/public/users');
+            exit;
+        }
+        break;
+
+    case strpos($requestUri, 'projet-commerce-nba/public/users/delete') !== false:
+        $id = $_GET['id'];
+        $userController->deleteUser($id);
+        header('Location: /projet-commerce-nba/public/users');
+        exit;
+        break;
+
+
     default:
         echo "<h1>404 - Page non trouvée</h1>";
         break;
