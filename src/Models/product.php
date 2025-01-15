@@ -25,16 +25,17 @@ class Product {
     }
 
     // Create a new product
-    public function create($name, $description, $price, $stock, $category_id) {
+    public function create($name, $description, $price, $stock, $category_id, $image_path) {
         $stmt = $this->pdo->prepare("
-            INSERT INTO products (name, description, price, stock, category_id) 
-            VALUES (:name, :description, :price, :stock, :category_id)
+            INSERT INTO products (name, description, price, stock, category_id, image_path) 
+            VALUES (:name, :description, :price, :stock, :category_id, :image_path)
         ");
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':stock', $stock);
         $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+        $stmt->bindParam(':image_path', $image_path);
         return $stmt->execute();
     }
 
@@ -47,18 +48,30 @@ class Product {
     }
 
     // Update an existing product
-    public function update($id, $name, $description, $price, $stock, $category_id) {
-        $stmt = $this->pdo->prepare("
+    public function update($id, $name, $description, $price, $stock, $category_id, $image_path) {
+        $query = "
             UPDATE products 
-            SET name = :name, description = :description, price = :price, stock = :stock, category_id = :category_id 
-            WHERE id = :id
-        ");
+            SET name = :name, description = :description, price = :price, stock = :stock, category_id = :category_id
+        ";
+    
+        if ($image_path) {
+            $query .= ", image_path = :image_path";
+        }
+    
+        $query .= " WHERE id = :id";
+    
+        $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':stock', $stock);
         $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+    
+        if ($image_path) {
+            $stmt->bindParam(':image_path', $image_path);
+        }
+    
         return $stmt->execute();
     }
 

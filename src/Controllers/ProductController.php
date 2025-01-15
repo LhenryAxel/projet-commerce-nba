@@ -12,7 +12,7 @@ class ProductController {
     // Initialize Product and Category models
     public function __construct() {
         $this->model = new Product();
-        $this->categoryModel = new Category(); 
+        $this->categoryModel = new Category();
     }
 
     // Handle product list request and load the view
@@ -28,11 +28,14 @@ class ProductController {
     
         require_once '../src/Views/products.php';
     }
-    
-    
+
     // Create a new product and redirect to the list
-    public function create($name, $description, $price, $stock, $category_id) {
-        if ($this->model->create($name, $description, $price, $stock, $category_id)) {
+    public function create($name, $description, $price, $stock, $category_id, $image) {
+        // Handle image upload
+        $imagePath = $this->uploadImage($image);
+
+        // Pass the image path to the model
+        if ($this->model->create($name, $description, $price, $stock, $category_id, $imagePath)) {
             header('Location: /projet-commerce-nba/public/products');
             exit;
         } else {
@@ -47,15 +50,18 @@ class ProductController {
         require_once '../src/Views/edit_product.php';
     }
 
-    // Update an existing product and redirect to the list
-    public function update($id, $name, $description, $price, $stock, $category_id) {
-        if ($this->model->update($id, $name, $description, $price, $stock, $category_id)) {
+    public function update($id, $name, $description, $price, $stock, $category_id, $image) {
+        // Handle image upload
+        $imagePath = $this->uploadImage($image);
+    
+        // Update the product with the new image path
+        if ($this->model->update($id, $name, $description, $price, $stock, $category_id, $imagePath)) {
             header('Location: /projet-commerce-nba/public/products');
             exit;
         } else {
             echo "Erreur lors de la mise à jour du produit.";
         }
-    }
+    }    
 
     // Delete a product and redirect to the list
     public function delete($id) {
@@ -65,5 +71,28 @@ class ProductController {
         } else {
             echo "Erreur lors de la suppression du produit.";
         }
+    }
+
+    // Handle image upload
+    private function uploadImage($image) {
+        // Ensure the uploads directory exists
+        $targetDir = realpath(__DIR__ . '/../../public/uploads');
+        if (!$targetDir) {
+            mkdir(__DIR__ . '/../../public/uploads', 0755, true);
+            $targetDir = realpath(__DIR__ . '/../../public/uploads');
+        }
+
+        $imagePath = null;
+
+        if (!empty($image['name'])) {
+            $targetFile = $targetDir . '/' . basename($image['name']);
+            $webPath = '/uploads/' . basename($image['name']); // Relative path for database
+
+            if (move_uploaded_file($image['tmp_name'], $targetFile)) {
+                $imagePath = $webPath;
+            }
+        }
+
+        return $imagePath;
     }
 }

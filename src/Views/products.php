@@ -13,7 +13,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         h1 {
@@ -120,40 +119,42 @@
             background-color: #0056b3;
         }
 
-    a.delete {
-        text-decoration: none;
-        padding: 6px 12px;
-        background-color: #dc3545;
-        color: white;
-        border-radius: 5px;
-        font-weight: bold;
-        font-size: 14px;
-        display: inline-block;
-        margin-right: 5px;
-    }
+        a.delete {
+            text-decoration: none;
+            padding: 6px 12px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+            margin-right: 5px;
+        }
 
-    a.delete:hover {
-        background-color: #c82333;
-    }
+        a.delete:hover {
+            background-color: #c82333;
+        }
 
-    a.edit {
-        text-decoration: none;
-        padding: 6px 12px;
-        background-color: #28a745;
-        color: white;
-        border-radius: 5px;
-        font-weight: bold;
-        font-size: 14px;
-        display: inline-block;
-    }
+        a.edit {
+            text-decoration: none;
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+        }
 
-    a.edit:hover {
-        background-color: #218838;
-    }
+        a.edit:hover {
+            background-color: #218838;
+        }
 
-    td a {
-        margin-right: 5px;
-    }
+        td img {
+            max-width: 50px;
+            max-height: 50px;
+            object-fit: cover;
+        }
 
     </style>
 </head>
@@ -163,28 +164,33 @@
         <!-- Form for adding products -->
         <div class="form-container">
             <h2>Ajouter un produit</h2>
-            <form action="/projet-commerce-nba/public/products" method="POST">
-                <label for="name">Nom :</label>
-                <input type="text" name="name" id="name" placeholder="Nom du produit" required>
+            <form action="/projet-commerce-nba/public/products" method="POST" enctype="multipart/form-data">
+    <label for="name">Nom :</label>
+    <input type="text" name="name" id="name" placeholder="Nom du produit" required>
 
-                <label for="description">Description :</label>
-                <textarea name="description" id="description" placeholder="Description"></textarea>
+    <label for="description">Description :</label>
+    <textarea name="description" id="description" placeholder="Description"></textarea>
 
-                <label for="price">Prix :</label>
-                <input type="number" name="price" id="price" step="0.01" placeholder="Prix du produit" required>
+    <label for="price">Prix :</label>
+    <input type="number" name="price" id="price" step="0.01" placeholder="Prix du produit" required>
 
-                <label for="stock">Stock :</label>
-                <input type="number" name="stock" id="stock" placeholder="Quantité en stock" required>
+    <label for="stock">Stock :</label>
+    <input type="number" name="stock" id="stock" placeholder="Quantité en stock" required>
 
-                <label for="category_id">Catégorie :</label>
-                <select name="category_id" id="category_id" required>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
-                    <?php endforeach; ?>
-                </select>
+    <label for="category_id">Catégorie :</label>
+    <select name="category_id" id="category_id" required>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+        <?php endforeach; ?>
+    </select>
 
-                <button type="submit">Ajouter</button>
-            </form>
+    <!-- Champ pour l'upload d'image -->
+    <label for="image">Image :</label>
+    <input type="file" name="image" id="image" accept="image/*">
+
+    <button type="submit">Ajouter</button>
+</form>
+
         </div>
 
         <!-- Filter form -->
@@ -228,6 +234,7 @@
                 <th>Prix</th>
                 <th>Stock</th>
                 <th>Catégorie</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -242,14 +249,23 @@
                         <td><?= $product['stock'] ?></td>
                         <td><?= $product['category_name'] ?></td>
                         <td>
-                            <a href="/projet-commerce-nba/public/products/edit?id=<?= $product['id'] ?>"class="edit">Modifier</a>
+                            <?php if (!empty($product['image_path'])): ?>
+                                <img src="/projet-commerce-nba/public/uploads/<?= htmlspecialchars(basename($product['image_path'])) ?>" 
+         alt="<?= htmlspecialchars($product['name']) ?>" 
+         style="max-width: 50px; max-height: 50px; object-fit: cover;">
+                            <?php else: ?>
+                                Aucun
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="/projet-commerce-nba/public/products/edit?id=<?= $product['id'] ?>" class="edit">Modifier</a>
                             <a href="/projet-commerce-nba/public/products/delete?id=<?= $product['id'] ?>" class="delete" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?')">Supprimer</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="7">Aucun produit trouvé.</td>
+                    <td colspan="8">Aucun produit trouvé.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

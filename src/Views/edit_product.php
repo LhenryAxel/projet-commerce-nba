@@ -79,11 +79,23 @@
         a:hover {
             background-color: #5a6268;
         }
+
+        .image-preview {
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <h1>Modifier un produit</h1>
-    <form action="/projet-commerce-nba/public/products/edit" method="POST">
+    <form action="/projet-commerce-nba/public/products/edit" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= $product['id'] ?>">
 
         <label for="name">Nom :</label>
@@ -100,16 +112,22 @@
 
         <label for="category_id">Catégorie :</label>
         <select name="category_id" id="category_id" required>
-            <?php if (!empty($categories)): ?>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['id'] ?>" <?= $category['id'] == $product['category_id'] ? 'selected' : '' ?>>
-                        <?= $category['name'] ?>
-                    </option>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <option value="">Aucune catégorie disponible</option>
-            <?php endif; ?>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?= $category['id'] ?>" <?= $category['id'] == $product['category_id'] ? 'selected' : '' ?>>
+                    <?= $category['name'] ?>
+                </option>
+            <?php endforeach; ?>
         </select>
+
+        <label for="image">Image :</label>
+        <input type="file" name="image" id="image">
+
+        <!-- Show image preview if an image exists -->
+        <?php if (!empty($product['image'])): ?>
+            <div class="image-preview">
+                <img src="/projet-commerce-nba/public<?= $product['image'] ?>" alt="<?= $product['name'] ?>">
+            </div>
+        <?php endif; ?>
 
         <button type="submit">Mettre à jour</button>
     </form>

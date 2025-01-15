@@ -138,7 +138,9 @@ switch (true) {
                 $price = $_POST['price'];
                 $stock = $_POST['stock'];
                 $category_id = $_POST['category_id'];
-                $productController->update($id, $name, $description, $price, $stock, $category_id);
+                $image = isset($_FILES['image']) ? $_FILES['image'] : null; // Ensure the image is passed
+    
+                $productController->update($id, $name, $description, $price, $stock, $category_id, $image);
             } else {
                 // Create new product
                 $name = $_POST['name'];
@@ -146,52 +148,37 @@ switch (true) {
                 $price = $_POST['price'];
                 $stock = $_POST['stock'];
                 $category_id = $_POST['category_id'];
-                $productController->create($name, $description, $price, $stock, $category_id);
+                $image = isset($_FILES['image']) ? $_FILES['image'] : null; // Ensure the image is passed
+    
+                $productController->create($name, $description, $price, $stock, $category_id, $image);
             }
         } else {
             $productController->handleRequest();
         }
         break;
+      
 
     case strpos($requestUri, 'projet-commerce-nba/public/products/delete') !== false:
         $id = $_GET['id'];
         $productController->delete($id);
         break;
 
-    case strpos($requestUri, 'projet-commerce-nba/public/products/edit') !== false:
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $description = $_POST['description'];
-            $price = $_POST['price'];
-            $stock = $_POST['stock'];
-            $category_id = $_POST['category_id'];
-            $productController->update($id, $name, $description, $price, $stock, $category_id);
-        } else {
-            $id = $_GET['id'];
-            $productController->edit($id);
-        }
-        break;
-
-    case strpos($requestUri, 'projet-commerce-nba/public/products') === 0:
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Handle product creation
-            $name = $_POST['name'];
-            $description = $_POST['description'];
-            $price = $_POST['price'];
-            $stock = $_POST['stock'];
-            $category_id = $_POST['category_id'];
-            $productController->create($name, $description, $price, $stock, $category_id);
-        } else {
-            // Handle product filtering or listing
-            $queryParams = [];
-            parse_str($_SERVER['QUERY_STRING'], $queryParams); // Parse query parameters
-            $category_filter = $queryParams['category_filter'] ?? null;
-            $price_min = $queryParams['price_min'] ?? null;
-            $price_max = $queryParams['price_max'] ?? null;
-            $productController->handleRequest($category_filter, $price_min, $price_max);
-        }
-        break;
+        case strpos($requestUri, 'projet-commerce-nba/public/products/edit') !== false:
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $id = $_POST['id'];
+                $name = $_POST['name'];
+                $description = $_POST['description'];
+                $price = $_POST['price'];
+                $stock = $_POST['stock'];
+                $category_id = $_POST['category_id'];
+                $image = isset($_FILES['image']) ? $_FILES['image'] : null; // Pass the image file
+        
+                $productController->update($id, $name, $description, $price, $stock, $category_id, $image);
+            } else {
+                $id = $_GET['id'];
+                $productController->edit($id);
+            }
+            break;        
 
 
     // User registration
