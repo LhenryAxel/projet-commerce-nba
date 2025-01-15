@@ -45,12 +45,50 @@ if (in_array($requestUri, $protectedRoutes) && !isset($_SESSION['user'])) {
 switch (true) {
     // Home page route
     case $requestUri === 'projet-commerce-nba/public':
-        echo "<h1>Bienvenue dans l'application NBA Store</h1>";
-        echo '<a href="/projet-commerce-nba/public/categories">Gérer les catégories</a><br>';
-        echo '<a href="/projet-commerce-nba/public/products">Gérer les produits</a><br>';
-        echo '<a href="/projet-commerce-nba/public/orders">Gérer les commandes</a><br>';
-        echo '<a href="/projet-commerce-nba/public/logout">Se déconnecter</a>';
+        echo '
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>NBA Store Admin</title>
+            <link rel="stylesheet" href="/projet-commerce-nba/public/css/style.css">
+        </head>
+        <body>
+            <header class="admin-header">
+                <h1>NBA Store - Tableau de bord</h1>
+                <nav>
+                    <a href="/projet-commerce-nba/public/logout" class="logout-btn">Déconnexion</a>
+                </nav>
+            </header>
+            <main class="dashboard">
+                <div class="dashboard-cards">
+                    <a href="/projet-commerce-nba/public/categories" class="dashboard-card">
+                        <h2>Catégories</h2>
+                        <p>Gérer les catégories de produits.</p>
+                    </a>
+                    <a href="/projet-commerce-nba/public/products" class="dashboard-card">
+                        <h2>Produits</h2>
+                        <p>Ajouter, modifier ou supprimer des produits.</p>
+                    </a>
+                    <a href="/projet-commerce-nba/public/orders" class="dashboard-card">
+                        <h2>Commandes</h2>
+                        <p>Voir et gérer les commandes clients.</p>
+                    </a>
+                    <a href="/projet-commerce-nba/public/users" class="dashboard-card">
+                        <h2>Utilisateurs</h2>
+                        <p>Gérer les administrateurs et les clients.</p>
+                    </a>
+                </div>
+            </main>
+            <footer class="admin-footer">
+                <p>&copy; ' . date('Y') . ' NBA Store Admin. Tous droits réservés.</p>
+            </footer>
+        </body>
+        </html>
+        ';
         break;
+        
 
     // Category routes
     case $requestUri === 'projet-commerce-nba/public/categories':

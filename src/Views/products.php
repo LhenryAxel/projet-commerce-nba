@@ -10,6 +10,10 @@
             margin: 0;
             padding: 20px;
             background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         h1 {
@@ -17,28 +21,41 @@
             color: #333;
         }
 
-        form {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .form-container {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
+            padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            color: #007BFF;
         }
 
         form label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: bold;
         }
 
-        form input[type="text"],
-        form input[type="number"],
+        form input,
         form textarea,
-        form select {
+        form select,
+        form button {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -46,15 +63,10 @@
         }
 
         form button {
-            display: block;
-            width: 100%;
-            padding: 10px;
             background-color: #007BFF;
             color: white;
-            font-size: 16px;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
 
@@ -62,11 +74,22 @@
             background-color: #0056b3;
         }
 
+        #filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        #filter-form div {
+            flex: 1;
+            min-width: 120px;
+        }
+
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 20px;
-            background-color: #fff;
+            border-collapse: collapse;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -77,111 +100,125 @@
 
         table th,
         table td {
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             text-align: center;
         }
 
-        table tbody tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        a {
-            text-decoration: none;
-            padding: 6px 12px;
-            color: white;
-            background-color: #28a745;
-            border-radius: 5px;
-            margin-right: 5px;
-            font-size: 14px;
-        }
-
-        a:hover {
-            background-color: #218838;
-        }
-
-        a.delete {
-            background-color: #dc3545;
-        }
-
-        a.delete:hover {
-            background-color: #c82333;
-        }
-
         .back-link {
-            display: block;
-            margin: 20px auto;
-            text-align: center;
-            font-size: 16px;
-            text-decoration: none;
-            color: white;
+            display: inline-block;
+            margin-top: 20px;
             padding: 10px 20px;
             background-color: #007BFF;
+            color: white;
+            text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            width: 150px;
-            margin-top: 30px;
         }
 
         .back-link:hover {
             background-color: #0056b3;
         }
 
-        .back-container {
-            text-align: center;
-            margin-top: 30px;
-        }
+    a.delete {
+        text-decoration: none;
+        padding: 6px 12px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    a.delete:hover {
+        background-color: #c82333;
+    }
+
+    a.edit {
+        text-decoration: none;
+        padding: 6px 12px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    a.edit:hover {
+        background-color: #218838;
+    }
+
+    td a {
+        margin-right: 5px;
+    }
+
     </style>
 </head>
 <body>
     <h1>Gestion des produits</h1>
+    <div class="container">
+        <!-- Form for adding products -->
+        <div class="form-container">
+            <h2>Ajouter un produit</h2>
+            <form action="/projet-commerce-nba/public/products" method="POST">
+                <label for="name">Nom :</label>
+                <input type="text" name="name" id="name" placeholder="Nom du produit" required>
 
-    <!-- Formulaire pour ajouter un produit -->
-    <form action="/projet-commerce-nba/public/products" method="POST">
-        <label for="name">Nom :</label>
-        <input type="text" name="name" id="name" placeholder="Nom du produit" required>
+                <label for="description">Description :</label>
+                <textarea name="description" id="description" placeholder="Description"></textarea>
 
-        <label for="description">Description :</label>
-        <textarea name="description" id="description" placeholder="Description"></textarea>
+                <label for="price">Prix :</label>
+                <input type="number" name="price" id="price" step="0.01" placeholder="Prix du produit" required>
 
-        <label for="price">Prix :</label>
-        <input type="number" name="price" id="price" step="0.01" placeholder="Prix du produit" required>
+                <label for="stock">Stock :</label>
+                <input type="number" name="stock" id="stock" placeholder="Quantité en stock" required>
 
-        <label for="stock">Stock :</label>
-        <input type="number" name="stock" id="stock" placeholder="Quantité en stock" required>
+                <label for="category_id">Catégorie :</label>
+                <select name="category_id" id="category_id" required>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
 
-        <label for="category_id">Catégorie :</label>
-        <select name="category_id" id="category_id" required>
-            <?php foreach ($categories as $category): ?>
-                <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
-            <?php endforeach; ?>
-        </select>
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
 
-        <button type="submit">Ajouter le produit</button>
-    </form>
+        <!-- Filter form -->
+        <div class="form-container">
+            <h2>Filtrer les produits</h2>
+            <form id="filter-form" method="GET" action="/projet-commerce-nba/public/products">
+                <div>
+                    <label for="category_filter">Catégorie :</label>
+                    <select name="category_filter" id="category_filter">
+                        <option value="">Toutes</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?= $category['id'] ?>" <?= isset($_GET['category_filter']) && $_GET['category_filter'] == $category['id'] ? 'selected' : '' ?>>
+                                <?= $category['name'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
 
-        <!-- Filtre pour les produits -->
-        <form method="GET" action="/projet-commerce-nba/public/products">
-        <label for="category_filter">Filtrer par catégorie :</label>
-        <select name="category_filter" id="category_filter">
-            <option value="">Toutes les catégories</option>
-            <?php foreach ($categories as $category): ?>
-                <option value="<?= $category['id'] ?>" <?= isset($_GET['category_filter']) && $_GET['category_filter'] == $category['id'] ? 'selected' : '' ?>>
-                    <?= $category['name'] ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+                <div>
+                    <label for="price_min">Prix min :</label>
+                    <input type="number" name="price_min" id="price_min" value="<?= $_GET['price_min'] ?? '' ?>" step="0.01">
+                </div>
 
-        <label for="price_min">Prix minimum :</label>
-        <input type="number" name="price_min" id="price_min" value="<?= $_GET['price_min'] ?? '' ?>" step="0.01">
+                <div>
+                    <label for="price_max">Prix max :</label>
+                    <input type="number" name="price_max" id="price_max" value="<?= $_GET['price_max'] ?? '' ?>" step="0.01">
+                </div>
 
-        <label for="price_max">Prix maximum :</label>
-        <input type="number" name="price_max" id="price_max" value="<?= $_GET['price_max'] ?? '' ?>" step="0.01">
+                <button type="submit">Filtrer</button>
+            </form>
+        </div>
+    </div>
 
-        <button type="submit">Filtrer</button>
-    </form>
-
-    <!-- Tableau des produits -->
+    <!-- Table for displaying products -->
     <table>
         <thead>
             <tr>
@@ -205,10 +242,8 @@
                         <td><?= $product['stock'] ?></td>
                         <td><?= $product['category_name'] ?></td>
                         <td>
-                            <a href="/projet-commerce-nba/public/products/edit?id=<?= $product['id'] ?>">Modifier</a>
-                            <a href="/projet-commerce-nba/public/products/delete?id=<?= $product['id'] ?>" 
-                               class="delete"
-                               onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?')">Supprimer</a>
+                            <a href="/projet-commerce-nba/public/products/edit?id=<?= $product['id'] ?>"class="edit">Modifier</a>
+                            <a href="/projet-commerce-nba/public/products/delete?id=<?= $product['id'] ?>" class="delete" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?')">Supprimer</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -220,8 +255,6 @@
         </tbody>
     </table>
 
-    <div class="back-container">
-        <a href="/projet-commerce-nba/public/" class="back-link">Retour à l'accueil</a>
-    </div>
+    <a href="/projet-commerce-nba/public/" class="back-link">Retour à l'accueil</a>
 </body>
 </html>
