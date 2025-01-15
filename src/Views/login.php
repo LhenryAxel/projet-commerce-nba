@@ -5,38 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
     <style>
+        /* Styles généraux */
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        h1 {
-            text-align: center;
-            color: #222;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
+            height: 100vh;
+            margin: 0;
         }
 
         .login-container {
             background-color: white;
-            border-radius: 8px;
             padding: 2rem;
+            border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
-            text-align: center;
         }
 
-        .login-container h1 {
-            margin-bottom: 1.5rem;
+        h1 {
+            text-align: center;
             color: #006bb6;
         }
 
@@ -46,20 +36,19 @@
             gap: 1rem;
         }
 
-        form label {
-            text-align: left;
+        label {
             font-weight: bold;
             color: #333;
         }
 
-        form input {
+        input {
             padding: 0.8rem;
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
 
-        form button {
+        button {
             padding: 0.8rem;
             font-size: 1rem;
             font-weight: bold;
@@ -71,49 +60,51 @@
             transition: background-color 0.3s ease;
         }
 
-        form button:hover {
+        button:hover {
             background-color: #00509e;
         }
 
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: -10px;
+        }
+
         .register-link {
+            text-align: center;
             margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #555;
         }
 
-        .register-link a button {
-            background-color: #28a745;
-            color: white;
-            font-size: 0.9rem;
+        .register-link a {
+            color: #006bb6;
             font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
-        .register-link a button:hover {
-            background-color: #218838;
+        .register-link a:hover {
+            color: #003f7f;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h1>Connexion</h1>
-        <form action="" method="POST">
+        <!-- Affichage du message d'erreur -->
+        <?php if (!empty($errorMessage)): ?>
+            <p class="error-message"><?= htmlspecialchars($errorMessage) ?></p>
+        <?php endif; ?>
+        <form action="/projet-commerce-nba/public/login" method="POST">
             <label for="email">Email :</label>
             <input type="email" name="email" id="email" required>
-            
+
             <label for="password">Mot de passe :</label>
             <input type="password" name="password" id="password" required>
-            
+
             <button type="submit">Se connecter</button>
         </form>
         <p class="register-link">Vous n'avez pas de compte ? 
-            <a href="/projet-commerce-nba/public/register">
-                <button>S'inscrire</button>
-            </a>
+            <a href="/projet-commerce-nba/public/register">S'inscrire</a>
         </p>
     </div>
 </body>

@@ -215,20 +215,20 @@ switch (true) {
 
     // User login
     case $requestUri === 'projet-commerce-nba/public/login':
+        $errorMessage = null; // Variable pour le message d'erreur
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = $_POST['password'];
-
+    
             if ($userController->login($email, $password)) {
                 header('Location: /projet-commerce-nba/public');
                 exit;
             } else {
-                echo "Identifiants invalides.";
+                $errorMessage = "Identifiants invalides. Veuillez réessayer.";
             }
-        } else {
-            require_once '../src/Views/login.php';
         }
-        break;
+        require_once '../src/Views/login.php';
+        break;    
 
     // User logout
     case $requestUri === 'projet-commerce-nba/public/logout':
