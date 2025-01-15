@@ -27,7 +27,7 @@ session_start();
 // Get the current request URI
 $requestUri = trim($_SERVER['REQUEST_URI'], '/');
 
-// Protected routes
+// Define public and protected routes
 $protectedRoutes = [
     'projet-commerce-nba/public',
     'projet-commerce-nba/public/categories',
@@ -35,7 +35,7 @@ $protectedRoutes = [
     'projet-commerce-nba/public/orders',
 ];
 
-// Restrict access to protected routes
+// Restrict access to protected routes if not logged in
 if (in_array($requestUri, $protectedRoutes) && !isset($_SESSION['user'])) {
     header('Location: /projet-commerce-nba/public/login');
     exit;
@@ -54,7 +54,22 @@ switch (true) {
 
     // Category routes
     case $requestUri === 'projet-commerce-nba/public/categories':
-        $categoryController->handleRequest();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['id']) && !empty($_POST['id'])) {
+                // Update existing category
+                $id = $_POST['id'];
+                $name = $_POST['name'];
+                $description = $_POST['description'];
+                $categoryController->update($id, $name, $description);
+            } else {
+                // Create new category
+                $name = $_POST['name'];
+                $description = $_POST['description'];
+                $categoryController->create($name, $description);
+            }
+        } else {
+            $categoryController->handleRequest();
+        }
         break;
 
     case strpos($requestUri, 'projet-commerce-nba/public/categories/delete') !== false:
@@ -63,19 +78,41 @@ switch (true) {
         break;
 
     case strpos($requestUri, 'projet-commerce-nba/public/categories/edit') !== false:
-        $id = $_GET['id'] ?? null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
             $name = $_POST['name'];
             $description = $_POST['description'];
             $categoryController->update($id, $name, $description);
         } else {
+            $id = $_GET['id'];
             $categoryController->edit($id);
         }
         break;
 
     // Product routes
     case $requestUri === 'projet-commerce-nba/public/products':
-        $productController->handleRequest();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['id']) && !empty($_POST['id'])) {
+                // Update existing product
+                $id = $_POST['id'];
+                $name = $_POST['name'];
+                $description = $_POST['description'];
+                $price = $_POST['price'];
+                $stock = $_POST['stock'];
+                $category_id = $_POST['category_id'];
+                $productController->update($id, $name, $description, $price, $stock, $category_id);
+            } else {
+                // Create new product
+                $name = $_POST['name'];
+                $description = $_POST['description'];
+                $price = $_POST['price'];
+                $stock = $_POST['stock'];
+                $category_id = $_POST['category_id'];
+                $productController->create($name, $description, $price, $stock, $category_id);
+            }
+        } else {
+            $productController->handleRequest();
+        }
         break;
 
     case strpos($requestUri, 'projet-commerce-nba/public/products/delete') !== false:
@@ -84,8 +121,8 @@ switch (true) {
         break;
 
     case strpos($requestUri, 'projet-commerce-nba/public/products/edit') !== false:
-        $id = $_GET['id'] ?? null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
             $name = $_POST['name'];
             $description = $_POST['description'];
             $price = $_POST['price'];
@@ -93,34 +130,31 @@ switch (true) {
             $category_id = $_POST['category_id'];
             $productController->update($id, $name, $description, $price, $stock, $category_id);
         } else {
+            $id = $_GET['id'];
             $productController->edit($id);
         }
         break;
 
-    // Order routes
-    case $requestUri === 'projet-commerce-nba/public/orders':
-        $orderController->handleRequest();
-        break;
-
-    case strpos($requestUri, 'projet-commerce-nba/public/orders/view') !== false:
-        $id = $_GET['id'];
-        $orderController->view($id);
-        break;
-
-    case strpos($requestUri, 'projet-commerce-nba/public/orders/edit') !== false:
-        $id = $_GET['id'] ?? null;
+    case strpos($requestUri, 'projet-commerce-nba/public/products') === 0:
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $status = $_POST['status'];
-            $orderController->updateOrder($id, $status);
+            // Handle product creation
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            $price = $_POST['price'];
+            $stock = $_POST['stock'];
+            $category_id = $_POST['category_id'];
+            $productController->create($name, $description, $price, $stock, $category_id);
         } else {
-            $orderController->editOrder($id);
+            // Handle product filtering or listing
+            $queryParams = [];
+            parse_str($_SERVER['QUERY_STRING'], $queryParams); // Parse query parameters
+            $category_filter = $queryParams['category_filter'] ?? null;
+            $price_min = $queryParams['price_min'] ?? null;
+            $price_max = $queryParams['price_max'] ?? null;
+            $productController->handleRequest($category_filter, $price_min, $price_max);
         }
         break;
 
-    case strpos($requestUri, 'projet-commerce-nba/public/orders/delete') !== false:
-        $id = $_GET['id'];
-        $orderController->deleteOrder($id);
-        break;
 
     // User registration
     case $requestUri === 'projet-commerce-nba/public/register':
