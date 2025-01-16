@@ -96,41 +96,46 @@
 <body>
     <h1>Modifier un produit</h1>
     <form action="/projet-commerce-nba/public/products/edit" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+    <input type="hidden" name="id" value="<?= $product['id'] ?>">
 
-        <label for="name">Nom :</label>
-        <input type="text" name="name" id="name" value="<?= $product['name'] ?>" required>
+    <label for="name">Nom :</label>
+    <input type="text" name="name" id="name" value="<?= htmlspecialchars($product['name']) ?>" required>
 
-        <label for="description">Description :</label>
-        <textarea name="description" id="description" required><?= $product['description'] ?></textarea>
+    <label for="description">Description :</label>
+    <textarea name="description" id="description" required><?= htmlspecialchars($product['description']) ?></textarea>
 
-        <label for="price">Prix :</label>
-        <input type="number" name="price" id="price" step="0.01" value="<?= $product['price'] ?>" required>
+    <label for="price">Prix :</label>
+    <input type="number" name="price" id="price" step="0.01" value="<?= $product['price'] ?>" required>
 
-        <label for="stock">Stock :</label>
-        <input type="number" name="stock" id="stock" value="<?= $product['stock'] ?>" required>
+    <label for="stock">Stock :</label>
+    <input type="number" name="stock" id="stock" value="<?= $product['stock'] ?>" required>
 
-        <label for="category_id">Catégorie :</label>
-        <select name="category_id" id="category_id" required>
-            <?php foreach ($categories as $category): ?>
-                <option value="<?= $category['id'] ?>" <?= $category['id'] == $product['category_id'] ? 'selected' : '' ?>>
-                    <?= $category['name'] ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+    <label for="category_id">Catégorie :</label>
+    <select name="category_id" id="category_id" required>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?= $category['id'] ?>" <?= $category['id'] == $product['category_id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($category['name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
-        <label for="image">Image :</label>
-        <input type="file" name="image" id="image">
+    <label for="image">Image :</label>
+    <input type="file" name="image" id="image">
 
-        <!-- Show image preview if an image exists -->
-        <?php if (!empty($product['image'])): ?>
-            <div class="image-preview">
-                <img src="/projet-commerce-nba/public<?= $product['image'] ?>" alt="<?= $product['name'] ?>">
-            </div>
-        <?php endif; ?>
+    <?php if (!empty($product['image_path'])): ?>
+        <div class="image-preview">
+            <img src="/projet-commerce-nba/public/uploads/<?= htmlspecialchars(basename($product['image_path'])) ?>" 
+                 alt="<?= htmlspecialchars($product['name']) ?>" 
+                 style="max-width: 200px; max-height: 200px; object-fit: cover;">
+            <label>
+                <input type="checkbox" name="delete_image" value="1">
+                Supprimer l'image actuelle
+            </label>
+        </div>
+    <?php endif; ?>
 
-        <button type="submit">Mettre à jour</button>
-    </form>
-    <a href="/projet-commerce-nba/public/products">Annuler</a>
+    <button type="submit">Mettre à jour</button>
+</form>
+<a href="/projet-commerce-nba/public/products" class="back-link">Annuler</a>
 </body>
 </html>

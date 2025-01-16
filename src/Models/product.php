@@ -48,32 +48,22 @@ class Product {
     }
 
     // Update an existing product
-    public function update($id, $name, $description, $price, $stock, $category_id, $image_path) {
-        $query = "
+    public function update($id, $name, $description, $price, $stock, $category_id, $imagePath) {
+        $stmt = $this->pdo->prepare("
             UPDATE products 
-            SET name = :name, description = :description, price = :price, stock = :stock, category_id = :category_id
-        ";
-    
-        if ($image_path) {
-            $query .= ", image_path = :image_path";
-        }
-    
-        $query .= " WHERE id = :id";
-    
-        $stmt = $this->pdo->prepare($query);
+            SET name = :name, description = :description, price = :price, stock = :stock, category_id = :category_id, image_path = :image_path
+            WHERE id = :id
+        ");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':stock', $stock);
         $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-    
-        if ($image_path) {
-            $stmt->bindParam(':image_path', $image_path);
-        }
-    
+        $stmt->bindParam(':image_path', $imagePath);
         return $stmt->execute();
     }
+    
 
     // Delete a product by its ID
     public function delete($id) {

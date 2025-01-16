@@ -51,17 +51,34 @@ class ProductController {
     }
 
     public function update($id, $name, $description, $price, $stock, $category_id, $image) {
-        // Handle image upload
-        $imagePath = $this->uploadImage($image);
+        $product = $this->model->getById($id); 
+        $imagePath = $product['image_path']; 
     
-        // Update the product with the new image path
+        // Delete image
+        if (!empty($_POST['delete_image']) && $_POST['delete_image'] == 1) {
+            if (!empty($imagePath) && file_exists(__DIR__ . '/../../public/uploads/' . basename($imagePath))) {
+                unlink(__DIR__ . '/../../public/uploads/' . basename($imagePath));
+            }
+            $imagePath = null; 
+        }
+    
+        // If new image downloaded
+        if (!empty($image['name'])) {
+            if (!empty($imagePath) && file_exists(__DIR__ . '/../../public/uploads/' . basename($imagePath))) {
+                unlink(__DIR__ . '/../../public/uploads/' . basename($imagePath));
+            }
+    
+            $imagePath = '/uploads/' . basename($image['name']);
+            move_uploaded_file($image['tmp_name'], __DIR__ . '/../../public' . $imagePath);
+        }
+    
         if ($this->model->update($id, $name, $description, $price, $stock, $category_id, $imagePath)) {
             header('Location: /projet-commerce-nba/public/products');
             exit;
         } else {
             echo "Erreur lors de la mise à jour du produit.";
         }
-    }    
+    }     
 
     // Delete a product and redirect to the list
     public function delete($id) {

@@ -183,8 +183,7 @@
             <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
         <?php endforeach; ?>
     </select>
-
-    <!-- Champ pour l'upload d'image -->
+        
     <label for="image">Image :</label>
     <input type="file" name="image" id="image" accept="image/*">
 
