@@ -6,79 +6,86 @@
     <title>Produits disponibles</title>
     <style>
         body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-}
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-header h1 {
-    margin: 0;
-    font-size: 24px;
-}
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-header a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 10px 15px;
-    background-color: #dc3545;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
+        header nav {
+            display: flex;
+            gap: 10px;
+        }
 
-header a:hover {
-    background-color: #c82333;
-}
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            background-color: #dc3545;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
 
-main {
-    padding: 20px;
-    box-sizing: border-box;
-}
+        header a:hover {
+            background-color: #c82333;
+        }
 
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        main {
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-table thead {
-    background-color: #007BFF;
-    color: white;
-}
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-table th,
-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
+        table thead {
+            background-color: #007BFF;
+            color: white;
+        }
 
-table img {
-    max-width: 100px;
-    max-height: 100px;
-}
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
 
+        table img {
+            max-width: 100px;
+            max-height: 100px;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Produits disponibles</h1>
-        <a href="/projet-commerce-nba/public/logout">Déconnexion</a>
+        <nav>
+            <a href="/projet-commerce-nba/public/nba_articles">Voir les articles</a>
+            <a href="/projet-commerce-nba/public/logout">Déconnexion</a>
+        </nav>
     </header>
 
     <table>

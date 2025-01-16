@@ -1,20 +1,25 @@
 <?php
 require_once '../core/Database.php';
+require_once '../core/MongoDBConnection.php';
 require_once '../src/Models/Category.php';
 require_once '../src/Models/Product.php';
 require_once '../src/Models/User.php';
+require_once '../src/Models/Article.php';
 require_once '../src/Controllers/CategoryController.php';
 require_once '../src/Controllers/ProductController.php';
 require_once '../src/Controllers/UserController.php';
+require_once '../src/Controllers/ArticleController.php';
 
 use Controllers\CategoryController;
 use Controllers\ProductController;
 use Controllers\UserController;
+use Controllers\ArticleController;
 
 // Initialize controllers
 $categoryController = new CategoryController();
 $productController = new ProductController();
 $userController = new UserController();
+$articleController = new ArticleController();
 
 // Start session for user authentication
 session_start();
@@ -48,45 +53,9 @@ switch (true) {
             header('Location: /projet-commerce-nba/public/product_client');
             exit;
         }
-        echo '
-        <!DOCTYPE html>
-        <html lang="fr">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>NBA Store Admin</title>
-            <link rel="stylesheet" href="/projet-commerce-nba/public/css/style.css">
-        </head>
-        <body>
-            <header class="admin-header">
-                <h1>NBA Store - Tableau de bord</h1>
-                <nav>
-                    <a href="/projet-commerce-nba/public/logout" class="logout-btn">Déconnexion</a>
-                </nav>
-            </header>
-            <main class="dashboard">
-                <div class="dashboard-cards">
-                    <a href="/projet-commerce-nba/public/categories" class="dashboard-card">
-                        <h2>Catégories</h2>
-                        <p>Gérer les catégories de produits.</p>
-                    </a>
-                    <a href="/projet-commerce-nba/public/products" class="dashboard-card">
-                        <h2>Produits</h2>
-                        <p>Ajouter, modifier ou supprimer des produits.</p>
-                    </a>
-                    <a href="/projet-commerce-nba/public/users" class="dashboard-card">
-                        <h2>Utilisateurs</h2>
-                        <p>Gérer les administrateurs et les clients.</p>
-                    </a>
-                </div>
-            </main>
-            <footer class="admin-footer">
-                <p>&copy; ' . date('Y') . ' NBA Store Admin. Tous droits réservés.</p>
-            </footer>
-        </body>
-        </html>
-        ';
+        require_once '../src/Views/dashboard_admin.php';
         break;
+    
 
     // Client Product Page
     case $requestUri === 'projet-commerce-nba/public/product_client':
@@ -382,6 +351,36 @@ switch (true) {
         header('Location: /projet-commerce-nba/public/users');
         exit;
         break;
+
+    case $requestUri === 'projet-commerce-nba/public/nba_articles/create':
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            header('Location: /projet-commerce-nba/public/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'title' => $_POST['title'],
+                'content' => $_POST['content'],
+                'author' => $_POST['author'],
+                'tags' => explode(',', $_POST['tags']),
+                'team' => $_POST['team'],
+                'player' => $_POST['player']
+            ];
+            $articleController->createArticle($data);
+            header('Location: /projet-commerce-nba/public/nba_articles');
+            exit;
+        } else {
+            require_once '../src/Views/create_article.php';
+        }
+        break;
+
+        case $requestUri === 'projet-commerce-nba/public/nba_articles':
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $articles = $articleController->listArticles(); 
+                require_once '../src/Views/list_articles.php'; 
+            }
+            break;
 
     default:
         echo "<h1>404 - Page non trouvée</h1>";
