@@ -19,17 +19,30 @@ class UserController {
 
     public function login($email, $password) {
         $user = $this->userModel->findByEmail($email);
+    
         if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['user'] = $user;
-            return true;
-        }
-        return false;
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email'],
+                'role' => $user['role'] // Ensure the role is included
+            ];
+            echo password_hash('adminpassword', PASSWORD_DEFAULT);
+            
+            return true; 
+        }        
+        return false; 
     }
+    
 
     public function logout() {
+        session_unset();
         session_destroy();
-        unset($_SESSION['user']);
+        header('Location: /projet-commerce-nba/public/login');
+        exit;
     }
+    
 
     public function listUsers() {
         return $this->userModel->getAllUsers();
@@ -38,7 +51,7 @@ class UserController {
     public function createUser($first_name, $last_name, $email, $password, $role) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         return $this->userModel->createUser($first_name, $last_name, $email, $password_hash, $role);
-    }
+    }    
 
     public function editUser($id, $data = null) {
         $user = $this->userModel->findById($id);
@@ -65,4 +78,15 @@ class UserController {
     public function getUserById($id) {
         return $this->userModel->findById($id);
     }
+
+    public function updateUser($id, $first_name, $last_name, $email, $role) {
+        $updatedData = [
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'email' => $email,
+            'role' => $role
+        ];
+    
+        return $this->userModel->update($id, $updatedData);
+    }    
 }

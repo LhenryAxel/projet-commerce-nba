@@ -26,11 +26,12 @@ class User {
     }
 
     public function findByEmail($email) {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     public function getAllUsers() {
         $stmt = $this->pdo->query("SELECT id, first_name, last_name, email, role, created_at FROM users");
@@ -38,31 +39,31 @@ class User {
     }
 
     public function createUser($first_name, $last_name, $email, $password_hash, $role) {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO users (first_name, last_name, email, password_hash, role, created_at) 
-            VALUES (:first_name, :last_name, :email, :password_hash, :role, NOW())
-        ");
+        $query = "INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (:first_name, :last_name, :email, :password_hash, :role)";
+        $stmt = $this->pdo->prepare($query);
+    
         $stmt->bindParam(':first_name', $first_name);
         $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password_hash', $password_hash);
         $stmt->bindParam(':role', $role);
+    
         return $stmt->execute();
-    }
+    }    
     
     public function update($id, $data) {
-        $stmt = $this->pdo->prepare("
-            UPDATE users 
-            SET first_name = :first_name, last_name = :last_name, email = :email, role = :role 
-            WHERE id = :id
-        ");
+        $query = "UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email, role = :role WHERE id = :id";
+    
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':first_name', $data['first_name']);
         $stmt->bindParam(':last_name', $data['last_name']);
         $stmt->bindParam(':email', $data['email']);
         $stmt->bindParam(':role', $data['role']);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
         return $stmt->execute();
     }
+    
     
 
     public function deleteUser($id) {

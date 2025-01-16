@@ -95,4 +95,9 @@ class ProductController {
 
         return $imagePath;
     }
+
+    public function handleClientRequest() {
+        $products = $this->model->getAll(); // Fetch all products
+        require_once '../src/Views/product_client.php'; // Load client view
+    }    
 }
