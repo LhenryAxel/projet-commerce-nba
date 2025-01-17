@@ -53,7 +53,7 @@ NBA Store is an e-commerce project developed as part of a school assignment. The
 Clone the Git repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/LhenryAxel/projet-commerce-nba.git
 cd your-repository
 ```
 
