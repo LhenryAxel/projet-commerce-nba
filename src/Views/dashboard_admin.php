@@ -33,10 +33,6 @@
                 <h2>Articles NBA</h2>
                 <p>Voir tous les articles NBA.</p>
             </a>
-            <a href="/projet-commerce-nba/public/nba_articles/create" class="dashboard-card">
-                <h2>Créer un article</h2>
-                <p>Ajouter un nouvel article NBA.</p>
-            </a>
         </div>
     </main>
     <footer class="admin-footer">
